@@ -1,0 +1,23 @@
+{
+  "name": "@venore/plugin-vagas",
+  "version": "1.0.0",
+  "description": "Cadastro de vagas de emprego pelo RH, com listagem publica (plugin do Venore Docks).",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./manifest": "./manifest.ts",
+    "./route-table": "./routes/route-table.ts",
+    "./contributions": "./contributions.ts",
+    "./migrations/*": "./migrations/*",
+    "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "drizzle-orm": ">=0.45",
+    "next": ">=16",
+    "react": ">=19"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.10"
+  }
+}
