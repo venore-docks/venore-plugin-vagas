@@ -1,4 +1,5 @@
 import { isValidCustomApplicationField } from "../../shared/application-fields";
+import { validateSalaryAndScheduleFields } from "../../shared/job-field-validation";
 import type { JobValidationError } from "../create-job/validation";
 import type { UpdateJobInput } from "./types";
 
@@ -15,5 +16,5 @@ export function validateUpdateJobInput(input: UpdateJobInput): JobValidationErro
   if (!input.customFormFields.every(isValidCustomApplicationField)) {
     return { code: "vagas.invalid_custom_form_fields", message: "Campo customizado do formulário inválido." };
   }
-  return null;
+  return validateSalaryAndScheduleFields(input);
 }

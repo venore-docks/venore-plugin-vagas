@@ -23,6 +23,22 @@ export type JobCategoryRecord = {
   updatedAt: Date;
 };
 
+// Catálogo único e compartilhado entre vagas — 5 grupos multi-seleção + "contract_regime"
+// (single-select, referenciado direto por jobs.contractRegimeId).
+export type TagCategory = "benefit" | "knowledge" | "skill" | "attitude" | "activity" | "contract_regime";
+
+export type TagItemRecord = {
+  id: string;
+  category: TagCategory;
+  label: string;
+  createdAt: Date;
+};
+
+export type SalaryType = "fixed" | "hourly" | "negotiable" | "interview";
+export type ContractType = "indeterminate" | "determinate";
+export type ScheduleType = "fixed" | "weekly_hours";
+export type WeekDay = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
+
 export type JobRecord = {
   id: string;
   title: string;
@@ -37,9 +53,30 @@ export type JobRecord = {
   coverMediaAssetId: string | null;
   customFormFields: CustomApplicationField[];
   requiresDisc: boolean;
+  discEnvironmentLabel: string | null;
+  // numeric no Postgres/Drizzle vem como string (evita perda de precisão de float em dinheiro) —
+  // formatação pra exibição fica em shared/format-job-details.ts.
+  salaryType: SalaryType;
+  salaryAmount: string | null;
+  contractRegimeId: string | null;
+  contractType: ContractType | null;
+  scheduleType: ScheduleType;
+  weeklyHours: string | null;
+  dailyStartTime: string | null;
+  dailyEndTime: string | null;
+  scheduleWeekDays: WeekDay[];
+  managerEmail: string | null;
   publishedAt: Date | null;
   closesAt: Date | null;
   createdByUserId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type FormTemplateRecord = {
+  id: string;
+  name: string;
+  fields: CustomApplicationField[];
   createdAt: Date;
   updatedAt: Date;
 };

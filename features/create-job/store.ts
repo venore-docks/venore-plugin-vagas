@@ -1,6 +1,7 @@
 import { db } from "@venore/plugin-sdk";
 import { vagasJobs } from "../../database/schema";
 import { generateJobSlug } from "../../shared/generate-slug";
+import { syncJobTags } from "../../shared/job-tags";
 import type { JobRecord } from "../../contracts/types";
 import type { CreateJobCommand } from "./types";
 
@@ -29,10 +30,32 @@ export async function insertJob(command: CreateJobCommand): Promise<JobRecord> {
           coverMediaAssetId: command.coverMediaAssetId || null,
           customFormFields: command.customFormFields ?? [],
           requiresDisc: command.requiresDisc ?? true,
+          discEnvironmentLabel: command.discEnvironmentLabel?.trim() || null,
+          salaryType: command.salaryType ?? "negotiable",
+          salaryAmount: command.salaryAmount || null,
+          contractRegimeId: command.contractRegimeId || null,
+          contractType: command.contractType ?? null,
+          scheduleType: command.scheduleType ?? "weekly_hours",
+          weeklyHours: command.weeklyHours || null,
+          dailyStartTime: command.dailyStartTime || null,
+          dailyEndTime: command.dailyEndTime || null,
+          scheduleWeekDays: command.scheduleWeekDays ?? [],
+          managerEmail: command.managerEmail?.trim() || null,
+          closesAt: command.closesAt ?? null,
           publishedAt: new Date(),
           createdByUserId: command.actorId,
         })
         .returning();
+
+      const allTagIds = [
+        ...(command.benefitIds ?? []),
+        ...(command.knowledgeIds ?? []),
+        ...(command.skillIds ?? []),
+        ...(command.attitudeIds ?? []),
+        ...(command.activityIds ?? []),
+      ];
+      if (allTagIds.length > 0) await syncJobTags(row.id, allTagIds);
+
       return row as JobRecord;
     } catch (cause) {
       const isUniqueViolation = cause instanceof Error && "code" in cause && (cause as { code?: string }).code === "23505";

@@ -7,7 +7,7 @@ export const vagasManifest: PluginManifest = {
   manifestVersion: "1.0.0",
   key: "vagas",
   name: "Vagas de emprego",
-  version: "1.1.0",
+  version: "1.2.0",
   description: "Cadastro de vagas de emprego pelo RH, com listagem pública sem login.",
   compatibility: { coreVersion: ">=2.0.0 <3.0.0" },
   // Opcional: candidatura cria uma instância de Test DISC vinculada (shared/disc-bridge.ts) só

@@ -4,7 +4,9 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@venore/plugin-sdk/ui";
 import { isPluginActive } from "@venore/plugin-sdk";
 import { getJobBySlug } from "../../../index";
-import { ApplyForm } from "./apply-form";
+import { formatContractType, formatSalary, formatSchedule } from "../../../shared/format-job-details";
+import { ApplyCta } from "./apply-cta";
+import { TagSection } from "./tag-section";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +22,9 @@ export default async function VagasPublicJobPage({ params }: { params: Promise<{
   }
 
   const job = result.data;
+  const scheduleLabel = formatSchedule(job);
+  const contractTypeLabel = formatContractType(job.contractType);
+  const isPastDeadline = Boolean(job.closesAt && job.closesAt.getTime() < Date.now());
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 py-10">
@@ -42,6 +47,31 @@ export default async function VagasPublicJobPage({ params }: { params: Promise<{
         )}
       </div>
 
+      <dl className="grid grid-cols-2 gap-3 rounded-panel border border-border bg-card p-4 text-sm sm:grid-cols-4">
+        <div>
+          <dt className="text-xs text-muted-foreground">Salário</dt>
+          <dd className="font-medium text-foreground">{formatSalary(job.salaryType, job.salaryAmount)}</dd>
+        </div>
+        {job.contractRegimeLabel && (
+          <div>
+            <dt className="text-xs text-muted-foreground">Regime</dt>
+            <dd className="font-medium text-foreground">{job.contractRegimeLabel}</dd>
+          </div>
+        )}
+        {contractTypeLabel && (
+          <div>
+            <dt className="text-xs text-muted-foreground">Contrato</dt>
+            <dd className="font-medium text-foreground">{contractTypeLabel}</dd>
+          </div>
+        )}
+        {scheduleLabel && (
+          <div>
+            <dt className="text-xs text-muted-foreground">Horário</dt>
+            <dd className="font-medium text-foreground">{scheduleLabel}</dd>
+          </div>
+        )}
+      </dl>
+
       <section className="space-y-2">
         <h2 className="text-sm font-semibold uppercase tracking-caps text-muted-foreground">Descrição</h2>
         <p className="whitespace-pre-line text-sm text-foreground">{job.description}</p>
@@ -54,7 +84,19 @@ export default async function VagasPublicJobPage({ params }: { params: Promise<{
         </section>
       )}
 
-      <ApplyForm jobId={job.id} customFormFields={job.customFormFields} />
+      <TagSection title="Conhecimento" labels={job.knowledge} />
+      <TagSection title="Habilidades" labels={job.skills} />
+      <TagSection title="Atitudes" labels={job.attitudes} />
+      <TagSection title="Atividades" labels={job.activities} />
+      <TagSection title="Benefícios" labels={job.benefits} />
+
+      {job.closesAt && !isPastDeadline && (
+        <p className="text-center text-xs text-muted-foreground">
+          Candidatar-se até {job.closesAt.toLocaleDateString("pt-BR")}
+        </p>
+      )}
+
+      <ApplyCta jobId={job.id} customFormFields={job.customFormFields} requiresDisc={job.requiresDisc} closed={isPastDeadline} />
 
       {job.applyContact && (
         <p className="text-center text-xs text-muted-foreground">

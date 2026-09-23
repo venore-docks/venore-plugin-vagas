@@ -1,8 +1,8 @@
 import type { OperationResult } from "@venore/plugin-sdk";
-import type { CustomApplicationField } from "../../contracts/types";
+import type { ContractType, CustomApplicationField, SalaryType, ScheduleType, WeekDay } from "../../contracts/types";
 
-// Projeção pública — não é o JobRecord cru (evita vazar createdByUserId, categoryId interno
-// etc.), e já vem com a capa resolvida e os campos que a página de candidatura precisa renderizar.
+// Projeção pública — não é o JobRecord cru (evita vazar createdByUserId, categoryId interno,
+// discEnvironmentLabel, managerEmail etc.), e já vem com a capa e os labels de tag resolvidos.
 export type PublicJobDetailView = {
   id: string;
   title: string;
@@ -15,6 +15,21 @@ export type PublicJobDetailView = {
   coverImageUrl: string | null;
   customFormFields: CustomApplicationField[];
   requiresDisc: boolean;
+  salaryType: SalaryType;
+  salaryAmount: string | null;
+  contractRegimeLabel: string | null;
+  contractType: ContractType | null;
+  scheduleType: ScheduleType;
+  weeklyHours: string | null;
+  dailyStartTime: string | null;
+  dailyEndTime: string | null;
+  scheduleWeekDays: WeekDay[];
+  benefits: string[];
+  knowledge: string[];
+  skills: string[];
+  attitudes: string[];
+  activities: string[];
+  closesAt: Date | null;
   publishedAt: Date | null;
 };
 

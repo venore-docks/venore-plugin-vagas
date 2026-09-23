@@ -29,6 +29,15 @@ export async function submitApplication(input: SubmitApplicationInput): Promise<
     return { success: false, error };
   }
 
+  // Checado antes do upload de propósito — evita gastar upload numa candidatura que vai ser
+  // recusada mesmo (página pública já esconde o CTA quando isso acontece, isto é defesa em
+  // profundidade pra quem submeter direto via action).
+  if (job.closesAt && job.closesAt.getTime() < Date.now()) {
+    const error = { code: "vagas.application_closed", message: "O prazo de candidatura para esta vaga encerrou." };
+    endOperation(handle, { success: false, error });
+    return { success: false, error };
+  }
+
   const missingField = findMissingRequiredField(job.customFormFields, input.formResponses);
   if (missingField) {
     const error = { code: "vagas.missing_required_field", message: `Preencha o campo "${missingField.label}".` };
@@ -75,7 +84,7 @@ export async function submitApplication(input: SubmitApplicationInput): Promise<
   }
 
   const instance = await disc.createDiscInstanceExternal({
-    environmentLabel: job.title,
+    environmentLabel: job.discEnvironmentLabel?.trim() || job.title,
     actorId: null,
     redirectUrl: confirmationUrl(job.slug, application.id),
     externalRef: `vagas:${application.id}`,

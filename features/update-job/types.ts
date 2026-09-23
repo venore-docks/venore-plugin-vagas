@@ -1,5 +1,5 @@
 import type { OperationResult } from "@venore/plugin-sdk";
-import type { CustomApplicationField, JobRecord, JobStatus } from "../../contracts/types";
+import type { ContractType, CustomApplicationField, JobRecord, JobStatus, SalaryType, ScheduleType, WeekDay } from "../../contracts/types";
 
 export type UpdateJobCommand = {
   jobId: string;
@@ -10,12 +10,29 @@ export type UpdateJobCommand = {
   requirements?: string | null;
   applyContact?: string | null;
   status: JobStatus;
-  // Substituição completa (mesma semântica dos campos acima) — o form de edição sempre reenvia
-  // os quatro, "limpar categoria/capa" é um valor null explícito, não ausência do campo.
+  // Substituição completa (mesma semântica dos campos abaixo) — o form de edição sempre reenvia
+  // tudo, "limpar" é um valor null/[] explícito, não ausência do campo.
   categoryId: string | null;
   coverMediaAssetId: string | null;
   customFormFields: CustomApplicationField[];
   requiresDisc: boolean;
+  discEnvironmentLabel: string | null;
+  salaryType: SalaryType;
+  salaryAmount: string | null;
+  contractRegimeId: string | null;
+  contractType: ContractType | null;
+  scheduleType: ScheduleType;
+  weeklyHours: string | null;
+  dailyStartTime: string | null;
+  dailyEndTime: string | null;
+  scheduleWeekDays: WeekDay[];
+  managerEmail: string | null;
+  closesAt: Date | null;
+  benefitIds: string[];
+  knowledgeIds: string[];
+  skillIds: string[];
+  attitudeIds: string[];
+  activityIds: string[];
   actorId: string;
 };
 

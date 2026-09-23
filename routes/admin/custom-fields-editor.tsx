@@ -4,13 +4,25 @@ import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { Button, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@venore/plugin-sdk/ui";
 import { APPLICATION_FIELD_TYPES } from "../../shared/application-fields";
-import type { CustomApplicationField } from "../../contracts/types";
+import type { CustomApplicationField, FormTemplateRecord } from "../../contracts/types";
+
+const NO_TEMPLATE_VALUE = "__none__";
 
 // Editor dos campos extras do formulário de candidatura, por vaga — o formulário básico (nome/
 // e-mail/telefone) é fixo, isto só edita o que se soma a ele. Estado local + input hidden com JSON
 // (mesmo padrão de MediaPickerField: componente client dentro de um <form> de server action, sem
-// precisar de fetch/submit próprio).
-export function CustomFieldsEditor({ name, initialFields = [] }: { name: string; initialFields?: CustomApplicationField[] }) {
+// precisar de fetch/submit próprio). templates é opcional — quando presente, mostra um seletor
+// "carregar de um template" que só PRÉ-PREENCHE o estado local (ponto de partida editável, nunca
+// grava nada de volta no template — decisão de produto: editar a vaga nunca altera o template).
+export function CustomFieldsEditor({
+  name,
+  initialFields = [],
+  templates = [],
+}: {
+  name: string;
+  initialFields?: CustomApplicationField[];
+  templates?: FormTemplateRecord[];
+}) {
   const [fields, setFields] = useState<CustomApplicationField[]>(initialFields);
 
   function addField() {
@@ -32,6 +44,28 @@ export function CustomFieldsEditor({ name, initialFields = [] }: { name: string;
     <div className="space-y-2">
       <input type="hidden" name={name} value={JSON.stringify(fields)} />
       <p className="text-sm text-muted-foreground">Campos extras do formulário (opcional)</p>
+
+      {templates.length > 0 && (
+        <Select
+          value={NO_TEMPLATE_VALUE}
+          onValueChange={(templateId) => {
+            const template = templates.find((entry) => entry.id === templateId);
+            if (template) setFields(template.fields);
+          }}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Carregar de um template..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={NO_TEMPLATE_VALUE}>Carregar de um template...</SelectItem>
+            {templates.map((template) => (
+              <SelectItem key={template.id} value={template.id}>
+                {template.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
 
       {fields.map((field) => (
         <div key={field.id} className="flex flex-wrap items-center gap-2 rounded-lg border border-border p-2">

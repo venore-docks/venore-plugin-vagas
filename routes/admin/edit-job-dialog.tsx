@@ -12,17 +12,23 @@ import {
   DialogTrigger,
 } from "@venore/plugin-sdk/ui";
 import type { PickableMedia } from "@venore/plugin-sdk/ui";
-import type { JobCategoryRecord, JobRecord } from "../../contracts/types";
+import type { FormTemplateRecord, JobCategoryRecord, JobRecord, TagCategory, TagItemRecord } from "../../contracts/types";
 import { EditJobForm } from "./edit-job-form";
 
 export function EditJobDialog({
   job,
   categories,
+  tagCatalogs,
+  templates,
   coverMedia,
+  jobTagIds,
 }: {
   job: JobRecord;
   categories: JobCategoryRecord[];
+  tagCatalogs: Record<TagCategory, TagItemRecord[]>;
+  templates: FormTemplateRecord[];
   coverMedia: PickableMedia | null;
+  jobTagIds: string[];
 }) {
   const [open, setOpen] = useState(false);
 
@@ -33,12 +39,20 @@ export function EditJobDialog({
           <Pencil className="size-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Editar vaga</DialogTitle>
           <DialogDescription>{job.title}</DialogDescription>
         </DialogHeader>
-        <EditJobForm job={job} categories={categories} coverMedia={coverMedia} onSuccess={() => setOpen(false)} />
+        <EditJobForm
+          job={job}
+          categories={categories}
+          tagCatalogs={tagCatalogs}
+          templates={templates}
+          coverMedia={coverMedia}
+          jobTagIds={jobTagIds}
+          onSuccess={() => setOpen(false)}
+        />
       </DialogContent>
     </Dialog>
   );

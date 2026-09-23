@@ -3,7 +3,7 @@ import { Users } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@venore/plugin-sdk/ui";
 import { Badge, Button } from "@venore/plugin-sdk/ui";
 import type { PickableMedia } from "@venore/plugin-sdk/ui";
-import type { JobCategoryRecord, JobRecord } from "../../contracts/types";
+import type { FormTemplateRecord, JobCategoryRecord, JobRecord, TagCategory, TagItemRecord } from "../../contracts/types";
 import { DeleteJobButton } from "./delete-job-button";
 import { EditJobDialog } from "./edit-job-dialog";
 
@@ -16,11 +16,17 @@ const STATUS_LABEL: Record<JobRecord["status"], string> = {
 export function JobTable({
   jobs,
   categories,
+  tagCatalogs,
+  templates,
   coverMediaByJobId,
+  jobTagIdsByJobId,
 }: {
   jobs: JobRecord[];
   categories: JobCategoryRecord[];
+  tagCatalogs: Record<TagCategory, TagItemRecord[]>;
+  templates: FormTemplateRecord[];
   coverMediaByJobId: Map<string, PickableMedia | null>;
+  jobTagIdsByJobId: Record<string, string[]>;
 }) {
   const categoryNameById = new Map(categories.map((category) => [category.id, category.name]));
 
@@ -59,7 +65,14 @@ export function JobTable({
                     <Users className="size-4" />
                   </Link>
                 </Button>
-                <EditJobDialog job={job} categories={categories} coverMedia={coverMediaByJobId.get(job.id) ?? null} />
+                <EditJobDialog
+                  job={job}
+                  categories={categories}
+                  tagCatalogs={tagCatalogs}
+                  templates={templates}
+                  coverMedia={coverMediaByJobId.get(job.id) ?? null}
+                  jobTagIds={jobTagIdsByJobId[job.id] ?? []}
+                />
                 <DeleteJobButton jobId={job.id} title={job.title} />
               </div>
             </TableCell>

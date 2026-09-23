@@ -1,0 +1,644 @@
+{
+  "id": "9ed540e8-85e4-4e25-85f7-6ac4654c741e",
+  "prevId": "aa2820f2-9871-422e-b384-4beaf1edfa76",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "vagas.applications": {
+      "name": "applications",
+      "schema": "vagas",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "job_id": {
+          "name": "job_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "candidate_name": {
+          "name": "candidate_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "candidate_email": {
+          "name": "candidate_email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "candidate_phone": {
+          "name": "candidate_phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resume_media_asset_id": {
+          "name": "resume_media_asset_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_responses": {
+          "name": "form_responses",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "disc_instance_id": {
+          "name": "disc_instance_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "disc_report_id": {
+          "name": "disc_report_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'submitted'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "applications_job_id_jobs_id_fk": {
+          "name": "applications_job_id_jobs_id_fk",
+          "tableFrom": "applications",
+          "tableTo": "jobs",
+          "schemaTo": "vagas",
+          "columnsFrom": [
+            "job_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "vagas_applications_status_check": {
+          "name": "vagas_applications_status_check",
+          "value": "\"vagas\".\"applications\".\"status\" in ('submitted', 'awaiting_disc', 'completed')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "vagas.form_templates": {
+      "name": "form_templates",
+      "schema": "vagas",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fields": {
+          "name": "fields",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "vagas.job_categories": {
+      "name": "job_categories",
+      "schema": "vagas",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cover_media_asset_id": {
+          "name": "cover_media_asset_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "job_categories_key_unique": {
+          "name": "job_categories_key_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "key"
+          ]
+        },
+        "job_categories_slug_unique": {
+          "name": "job_categories_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "vagas.job_tags": {
+      "name": "job_tags",
+      "schema": "vagas",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "job_id": {
+          "name": "job_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tag_item_id": {
+          "name": "tag_item_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "vagas_job_tags_unique_idx": {
+          "name": "vagas_job_tags_unique_idx",
+          "columns": [
+            {
+              "expression": "job_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "tag_item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "job_tags_job_id_jobs_id_fk": {
+          "name": "job_tags_job_id_jobs_id_fk",
+          "tableFrom": "job_tags",
+          "tableTo": "jobs",
+          "schemaTo": "vagas",
+          "columnsFrom": [
+            "job_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "job_tags_tag_item_id_tag_items_id_fk": {
+          "name": "job_tags_tag_item_id_tag_items_id_fk",
+          "tableFrom": "job_tags",
+          "tableTo": "tag_items",
+          "schemaTo": "vagas",
+          "columnsFrom": [
+            "tag_item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "vagas.jobs": {
+      "name": "jobs",
+      "schema": "vagas",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "department": {
+          "name": "department",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location": {
+          "name": "location",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "requirements": {
+          "name": "requirements",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_contact": {
+          "name": "apply_contact",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'open'"
+        },
+        "category_id": {
+          "name": "category_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cover_media_asset_id": {
+          "name": "cover_media_asset_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "custom_form_fields": {
+          "name": "custom_form_fields",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "requires_disc": {
+          "name": "requires_disc",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "disc_environment_label": {
+          "name": "disc_environment_label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "salary_type": {
+          "name": "salary_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'negotiable'"
+        },
+        "salary_amount": {
+          "name": "salary_amount",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contract_regime_id": {
+          "name": "contract_regime_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contract_type": {
+          "name": "contract_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_type": {
+          "name": "schedule_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'weekly_hours'"
+        },
+        "weekly_hours": {
+          "name": "weekly_hours",
+          "type": "numeric(5, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "daily_start_time": {
+          "name": "daily_start_time",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "daily_end_time": {
+          "name": "daily_end_time",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_week_days": {
+          "name": "schedule_week_days",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "manager_email": {
+          "name": "manager_email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "published_at": {
+          "name": "published_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "closes_at": {
+          "name": "closes_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by_user_id": {
+          "name": "created_by_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "jobs_category_id_job_categories_id_fk": {
+          "name": "jobs_category_id_job_categories_id_fk",
+          "tableFrom": "jobs",
+          "tableTo": "job_categories",
+          "schemaTo": "vagas",
+          "columnsFrom": [
+            "category_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "jobs_contract_regime_id_tag_items_id_fk": {
+          "name": "jobs_contract_regime_id_tag_items_id_fk",
+          "tableFrom": "jobs",
+          "tableTo": "tag_items",
+          "schemaTo": "vagas",
+          "columnsFrom": [
+            "contract_regime_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "jobs_slug_unique": {
+          "name": "jobs_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "vagas_jobs_status_check": {
+          "name": "vagas_jobs_status_check",
+          "value": "\"vagas\".\"jobs\".\"status\" in ('open', 'paused', 'closed')"
+        },
+        "vagas_jobs_salary_type_check": {
+          "name": "vagas_jobs_salary_type_check",
+          "value": "\"vagas\".\"jobs\".\"salary_type\" in ('fixed', 'hourly', 'negotiable', 'interview')"
+        },
+        "vagas_jobs_contract_type_check": {
+          "name": "vagas_jobs_contract_type_check",
+          "value": "\"vagas\".\"jobs\".\"contract_type\" is null or \"vagas\".\"jobs\".\"contract_type\" in ('indeterminate', 'determinate')"
+        },
+        "vagas_jobs_schedule_type_check": {
+          "name": "vagas_jobs_schedule_type_check",
+          "value": "\"vagas\".\"jobs\".\"schedule_type\" in ('fixed', 'weekly_hours')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "vagas.tag_items": {
+      "name": "tag_items",
+      "schema": "vagas",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "vagas_tag_items_category_label_idx": {
+          "name": "vagas_tag_items_category_label_idx",
+          "columns": [
+            {
+              "expression": "category",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "label",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "vagas_tag_items_category_check": {
+          "name": "vagas_tag_items_category_check",
+          "value": "\"vagas\".\"tag_items\".\"category\" in ('benefit', 'knowledge', 'skill', 'attitude', 'activity', 'contract_regime')"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "vagas": "vagas"
+  },
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

@@ -1,7 +1,7 @@
 import { eq, sql } from "drizzle-orm";
 import { db } from "@venore/plugin-sdk";
 import { vagasJobs } from "../../database/schema";
-import type { CustomApplicationField, JobRecord } from "../../contracts/types";
+import type { ContractType, CustomApplicationField, JobRecord, SalaryType, ScheduleType, WeekDay } from "../../contracts/types";
 
 export async function findJobById(id: string): Promise<JobRecord | null> {
   const [row] = await db.select().from(vagasJobs).where(eq(vagasJobs.id, id)).limit(1);
@@ -21,6 +21,18 @@ export async function applyJobUpdate(input: {
   coverMediaAssetId: string | null;
   customFormFields: CustomApplicationField[];
   requiresDisc: boolean;
+  discEnvironmentLabel: string | null;
+  salaryType: SalaryType;
+  salaryAmount: string | null;
+  contractRegimeId: string | null;
+  contractType: ContractType | null;
+  scheduleType: ScheduleType;
+  weeklyHours: string | null;
+  dailyStartTime: string | null;
+  dailyEndTime: string | null;
+  scheduleWeekDays: WeekDay[];
+  managerEmail: string | null;
+  closesAt: Date | null;
 }): Promise<JobRecord> {
   const [row] = await db
     .update(vagasJobs)
@@ -36,6 +48,18 @@ export async function applyJobUpdate(input: {
       coverMediaAssetId: input.coverMediaAssetId,
       customFormFields: input.customFormFields,
       requiresDisc: input.requiresDisc,
+      discEnvironmentLabel: input.discEnvironmentLabel,
+      salaryType: input.salaryType,
+      salaryAmount: input.salaryAmount,
+      contractRegimeId: input.contractRegimeId,
+      contractType: input.contractType,
+      scheduleType: input.scheduleType,
+      weeklyHours: input.weeklyHours,
+      dailyStartTime: input.dailyStartTime,
+      dailyEndTime: input.dailyEndTime,
+      scheduleWeekDays: input.scheduleWeekDays,
+      managerEmail: input.managerEmail,
+      closesAt: input.closesAt,
       updatedAt: sql`now()`,
     })
     .where(eq(vagasJobs.id, input.id))

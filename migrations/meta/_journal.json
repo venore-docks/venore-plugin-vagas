@@ -15,6 +15,13 @@
       "when": 1790102883606,
       "tag": "0001_job_categories_applications_and_custom_form",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790165525138,
+      "tag": "0002_salary_schedule_tags_templates",
+      "breakpoints": true
     }
   ]
 }

@@ -12,9 +12,17 @@ import {
   DialogTrigger,
 } from "@venore/plugin-sdk/ui";
 import { CreateJobForm } from "./create-job-form";
-import type { JobCategoryRecord } from "../../contracts/types";
+import type { FormTemplateRecord, JobCategoryRecord, TagCategory, TagItemRecord } from "../../contracts/types";
 
-export function CreateJobDialog({ categories }: { categories: JobCategoryRecord[] }) {
+export function CreateJobDialog({
+  categories,
+  tagCatalogs,
+  templates,
+}: {
+  categories: JobCategoryRecord[];
+  tagCatalogs: Record<TagCategory, TagItemRecord[]>;
+  templates: FormTemplateRecord[];
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -25,12 +33,12 @@ export function CreateJobDialog({ categories }: { categories: JobCategoryRecord[
           Nova vaga
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Nova vaga</DialogTitle>
           <DialogDescription>Cadastre uma vaga de emprego para publicar em /vagas.</DialogDescription>
         </DialogHeader>
-        <CreateJobForm categories={categories} onSuccess={() => setOpen(false)} />
+        <CreateJobForm categories={categories} tagCatalogs={tagCatalogs} templates={templates} onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );
