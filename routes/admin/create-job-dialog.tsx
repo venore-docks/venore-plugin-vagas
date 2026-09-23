@@ -2,17 +2,9 @@
 
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { Button } from "@venore/plugin-sdk/ui";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@venore/plugin-sdk/ui";
+import { Button, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@venore/plugin-sdk/ui";
+import { ConfirmCloseDialog } from "./confirm-close-dialog";
 import { CreateJobForm } from "./create-job-form";
-import { confirmBeforeClose } from "./dialog-confirm-close";
 import type { FormTemplateRecord, JobCategoryRecord, TagCategory, TagItemRecord } from "../../contracts/types";
 
 export function CreateJobDialog({
@@ -27,24 +19,24 @@ export function CreateJobDialog({
   const [open, setOpen] = useState(false);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="size-4" />
-          Nova vaga
-        </Button>
-      </DialogTrigger>
-      <DialogContent
-        className="max-h-[85vh] w-full max-w-3xl overflow-y-auto"
-        onPointerDownOutside={confirmBeforeClose}
-        onEscapeKeyDown={confirmBeforeClose}
-      >
-        <DialogHeader>
-          <DialogTitle>Nova vaga</DialogTitle>
-          <DialogDescription>Cadastre uma vaga de emprego para publicar em /vagas.</DialogDescription>
-        </DialogHeader>
-        <CreateJobForm categories={categories} tagCatalogs={tagCatalogs} templates={templates} onSuccess={() => setOpen(false)} />
-      </DialogContent>
-    </Dialog>
+    <ConfirmCloseDialog
+      open={open}
+      onOpenChange={setOpen}
+      contentClassName="max-h-[85vh] w-full max-w-3xl sm:max-w-3xl overflow-y-auto"
+      trigger={
+        <DialogTrigger asChild>
+          <Button>
+            <Plus className="size-4" />
+            Nova vaga
+          </Button>
+        </DialogTrigger>
+      }
+    >
+      <DialogHeader>
+        <DialogTitle>Nova vaga</DialogTitle>
+        <DialogDescription>Cadastre uma vaga de emprego para publicar em /vagas.</DialogDescription>
+      </DialogHeader>
+      <CreateJobForm categories={categories} tagCatalogs={tagCatalogs} templates={templates} onSuccess={() => setOpen(false)} />
+    </ConfirmCloseDialog>
   );
 }
