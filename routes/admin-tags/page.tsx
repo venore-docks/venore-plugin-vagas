@@ -3,14 +3,8 @@ import { ArrowLeft } from "lucide-react";
 import { listAllTagCatalogs } from "../../index";
 import { getPluginAdminPageData } from "@venore/plugin-sdk/admin";
 import { AdminAccessDenied, AdminPageHeader, Button } from "@venore/plugin-sdk/ui";
-import { VAGAS_TAG_CATEGORIES } from "../../database/schema";
+import { EMPTY_TAG_CATALOGS } from "../../shared/empty-tag-catalogs";
 import { TagCatalogManager } from "./tag-catalog-manager";
-import type { TagCategory, TagItemRecord } from "../../contracts/types";
-
-const EMPTY_CATALOGS = Object.fromEntries(VAGAS_TAG_CATEGORIES.map((category) => [category, []])) as Record<
-  TagCategory,
-  TagItemRecord[]
->;
 
 export default async function VagasTagsAdminPage() {
   const gate = await getPluginAdminPageData("vagas");
@@ -20,7 +14,7 @@ export default async function VagasTagsAdminPage() {
   }
 
   const result = await listAllTagCatalogs();
-  const catalogs = result.success ? result.data : EMPTY_CATALOGS;
+  const catalogs = result.success ? result.data : EMPTY_TAG_CATALOGS;
 
   return (
     <div className="space-y-8">

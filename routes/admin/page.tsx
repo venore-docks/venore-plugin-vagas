@@ -8,15 +8,9 @@ import { AdminStatTile } from "@venore/plugin-sdk/ui";
 import { Button } from "@venore/plugin-sdk/ui";
 import { EmptyState } from "@venore/plugin-sdk/ui";
 import { resolveMediaPickerValue } from "../../shared/resolve-media-picker-value";
+import { EMPTY_TAG_CATALOGS } from "../../shared/empty-tag-catalogs";
 import { CreateJobDialog } from "./create-job-dialog";
 import { JobTable } from "./job-table";
-import { VAGAS_TAG_CATEGORIES } from "../../database/schema";
-import type { TagCategory, TagItemRecord } from "../../contracts/types";
-
-const EMPTY_CATALOGS = Object.fromEntries(VAGAS_TAG_CATEGORIES.map((category) => [category, []])) as Record<
-  TagCategory,
-  TagItemRecord[]
->;
 
 export default async function VagasAdminPage() {
   const gate = await getPluginAdminPageData("vagas");
@@ -35,7 +29,7 @@ export default async function VagasAdminPage() {
     return <p className="text-sm text-destructive">Erro ao carregar vagas: {result.error.message}</p>;
   }
   const categories = categoriesResult.success ? categoriesResult.data : [];
-  const tagCatalogs = tagCatalogsResult.success ? tagCatalogsResult.data : EMPTY_CATALOGS;
+  const tagCatalogs = tagCatalogsResult.success ? tagCatalogsResult.data : EMPTY_TAG_CATALOGS;
   const templates = templatesResult.success ? templatesResult.data : [];
 
   const jobs = result.data;
