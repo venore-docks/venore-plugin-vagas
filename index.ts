@@ -25,6 +25,9 @@ export { deleteFormTemplateHandler as deleteFormTemplate } from "./features/dele
 export { listFormTemplatesHandler as listFormTemplates } from "./features/list-form-templates/handler";
 
 export { listJobTagsHandler as listJobTags } from "./features/list-job-tags/handler";
+export {
+  getApplicationDiscReportHandler as getApplicationDiscReport,
+} from "./features/get-application-disc-report/handler";
 
 export { submitApplicationHandler as submitApplication } from "./features/submit-application/handler";
 export { listApplicationsHandler as listApplications } from "./features/list-applications/handler";
@@ -77,6 +80,11 @@ export type { UpdateFormTemplateInput, UpdateFormTemplateResult } from "./featur
 export type { DeleteFormTemplateInput, DeleteFormTemplateResult } from "./features/delete-form-template/types";
 export type { ListFormTemplatesResult } from "./features/list-form-templates/types";
 export type { ListJobTagsInput, ListJobTagsResult } from "./features/list-job-tags/types";
+export type {
+  GetApplicationDiscReportInput,
+  GetApplicationDiscReportResult,
+  ApplicationDiscReportView,
+} from "./features/get-application-disc-report/types";
 export type {
   SubmitApplicationInput,
   SubmitApplicationResult,

@@ -12,6 +12,7 @@ import {
   DialogTrigger,
 } from "@venore/plugin-sdk/ui";
 import { CreateJobForm } from "./create-job-form";
+import { confirmBeforeClose } from "./dialog-confirm-close";
 import type { FormTemplateRecord, JobCategoryRecord, TagCategory, TagItemRecord } from "../../contracts/types";
 
 export function CreateJobDialog({
@@ -33,7 +34,11 @@ export function CreateJobDialog({
           Nova vaga
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[85vh] overflow-y-auto">
+      <DialogContent
+        className="max-h-[85vh] w-full max-w-3xl overflow-y-auto"
+        onPointerDownOutside={confirmBeforeClose}
+        onEscapeKeyDown={confirmBeforeClose}
+      >
         <DialogHeader>
           <DialogTitle>Nova vaga</DialogTitle>
           <DialogDescription>Cadastre uma vaga de emprego para publicar em /vagas.</DialogDescription>

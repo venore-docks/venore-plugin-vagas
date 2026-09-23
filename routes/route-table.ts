@@ -4,6 +4,7 @@ import AdminCategoriesPage from "./admin-categories/page";
 import AdminTagsPage from "./admin-tags/page";
 import AdminFormTemplatesPage from "./admin-form-templates/page";
 import AdminApplicationsPage from "./admin-applications/page";
+import AdminApplicationDiscReportPage from "./admin-applications/disc-report-page";
 import PublicPage from "./public/page";
 import PublicJobPage from "./public/job/page";
 import PublicJobApplicationConfirmationPage from "./public/job-application-confirmation/page";
@@ -15,6 +16,10 @@ export const vagasRouteTable: PluginRouteTable = {
     { pattern: "listas", Component: asPluginPage(AdminTagsPage) },
     { pattern: "formularios", Component: asPluginPage(AdminFormTemplatesPage) },
     { pattern: ":jobId/candidaturas", Component: asPluginPage(AdminApplicationsPage) },
+    {
+      pattern: ":jobId/candidaturas/:applicationId/relatorio-disc",
+      Component: asPluginPage(AdminApplicationDiscReportPage),
+    },
   ],
   public: [
     { pattern: "vagas", Component: asPluginPage(PublicPage) },

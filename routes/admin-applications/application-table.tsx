@@ -2,6 +2,8 @@ import Link from "next/link";
 import { FileText } from "lucide-react";
 import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@venore/plugin-sdk/ui";
 import type { ApplicationAdminView } from "../../index";
+import type { CustomApplicationField } from "../../contracts/types";
+import { ApplicationDetailDialog } from "./application-detail-dialog";
 import { SyncDiscButton } from "./sync-disc-button";
 
 const STATUS_LABEL: Record<ApplicationAdminView["status"], string> = {
@@ -16,7 +18,15 @@ const STATUS_VARIANT: Record<ApplicationAdminView["status"], "default" | "second
   completed: "default",
 };
 
-export function ApplicationTable({ jobId, applications }: { jobId: string; applications: ApplicationAdminView[] }) {
+export function ApplicationTable({
+  jobId,
+  applications,
+  customFormFields,
+}: {
+  jobId: string;
+  applications: ApplicationAdminView[];
+  customFormFields: CustomApplicationField[];
+}) {
   return (
     <Table>
       <TableHeader>
@@ -60,7 +70,10 @@ export function ApplicationTable({ jobId, applications }: { jobId: string; appli
                 : "—"}
             </TableCell>
             <TableCell className="text-right">
-              {application.status === "awaiting_disc" && <SyncDiscButton jobId={jobId} applicationId={application.id} />}
+              <div className="flex justify-end gap-1">
+                {application.status === "awaiting_disc" && <SyncDiscButton jobId={jobId} applicationId={application.id} />}
+                <ApplicationDetailDialog jobId={jobId} application={application} customFormFields={customFormFields} />
+              </div>
             </TableCell>
           </TableRow>
         ))}

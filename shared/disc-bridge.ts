@@ -28,9 +28,31 @@ export type DiscReportSummaryExternal = {
   createdAt: Date;
 };
 
+export type DiscAxisResultExternal = {
+  profile: string;
+  percentual: { d: number; i: number; s: number; c: number };
+};
+
+export type DiscProfileEntryExternal = { profile: string; description: string };
+
+// Espelha DiscReportView (venore-plugin-disc/features/get-disc-report/types.ts) — usado pro
+// "Baixar PDF" do relatório na candidatura (routes/admin-applications). getDiscReport (não
+// getDiscReportHandler com claim) é público por design, sem sessão nem efeito colateral (ver
+// venore-plugin-disc/features/get-disc-report/handler.ts) — nunca "reivindica" o relatório pra
+// conta de quem chama, diferente de abrir /disc/r/:id direto logado como RH.
+export type DiscReportViewExternal = {
+  id: string;
+  environmentLabel: string;
+  dataset: { more: DiscAxisResultExternal; less: DiscAxisResultExternal; stress: number | "Carregando..." };
+  createdAt: Date;
+  moreProfile: DiscProfileEntryExternal | undefined;
+  lessProfile: DiscProfileEntryExternal | undefined;
+};
+
 export type DiscBarrel = {
   createDiscInstanceExternal: (command: CreateDiscInstanceExternalCommand) => Promise<OpResult<DiscInstanceExternal>>;
   listInstanceReportsExternal: (instanceId: string) => Promise<OpResult<DiscReportSummaryExternal[]>>;
+  getDiscReport: (query: { reportId: string }) => Promise<OpResult<DiscReportViewExternal>>;
 };
 
 export function loadDisc(): Promise<DiscBarrel | null> {

@@ -45,7 +45,7 @@ export default async function VagasApplicationsAdminPage({ params }: { params: P
         <EmptyState icon={<Users className="size-8" strokeWidth={1.5} />} title="Nenhuma candidatura ainda" description="Assim que alguém se candidatar por /vagas, a candidatura aparece aqui." />
       ) : (
         <div className="rounded-panel border border-border bg-card">
-          <ApplicationTable jobId={jobId} applications={applications} />
+          <ApplicationTable jobId={jobId} applications={applications} customFormFields={job.customFormFields} />
         </div>
       )}
     </div>

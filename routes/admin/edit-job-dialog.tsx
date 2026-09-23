@@ -13,6 +13,7 @@ import {
 } from "@venore/plugin-sdk/ui";
 import type { PickableMedia } from "@venore/plugin-sdk/ui";
 import type { FormTemplateRecord, JobCategoryRecord, JobRecord, TagCategory, TagItemRecord } from "../../contracts/types";
+import { confirmBeforeClose } from "./dialog-confirm-close";
 import { EditJobForm } from "./edit-job-form";
 
 export function EditJobDialog({
@@ -39,7 +40,11 @@ export function EditJobDialog({
           <Pencil className="size-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[85vh] overflow-y-auto">
+      <DialogContent
+        className="max-h-[85vh] w-full max-w-3xl overflow-y-auto"
+        onPointerDownOutside={confirmBeforeClose}
+        onEscapeKeyDown={confirmBeforeClose}
+      >
         <DialogHeader>
           <DialogTitle>Editar vaga</DialogTitle>
           <DialogDescription>{job.title}</DialogDescription>
