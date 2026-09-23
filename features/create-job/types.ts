@@ -1,5 +1,5 @@
 import type { OperationResult } from "@venore/plugin-sdk";
-import type { JobRecord, JobStatus } from "../../contracts/types";
+import type { CustomApplicationField, JobRecord, JobStatus } from "../../contracts/types";
 
 export type CreateJobCommand = {
   title: string;
@@ -9,6 +9,10 @@ export type CreateJobCommand = {
   requirements?: string | null;
   applyContact?: string | null;
   status?: JobStatus;
+  categoryId?: string | null;
+  coverMediaAssetId?: string | null;
+  customFormFields?: CustomApplicationField[];
+  requiresDisc?: boolean;
   actorId: string;
 };
 

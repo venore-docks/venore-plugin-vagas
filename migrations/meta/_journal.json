@@ -8,6 +8,13 @@
       "when": 1789875030611,
       "tag": "0000_blue_solo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790102883606,
+      "tag": "0001_job_categories_applications_and_custom_form",
+      "breakpoints": true
     }
   ]
 }

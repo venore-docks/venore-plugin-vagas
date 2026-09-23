@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@venore/plugin-sdk/ui";
 import { isPluginActive } from "@venore/plugin-sdk";
 import { getJobBySlug } from "../../../index";
+import { ApplyForm } from "./apply-form";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,11 @@ export default async function VagasPublicJobPage({ params }: { params: Promise<{
         </Link>
       </Button>
 
+      {job.coverImageUrl && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={job.coverImageUrl} alt="" className="aspect-[2/1] w-full rounded-panel object-cover" />
+      )}
+
       <div>
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">{job.title}</h1>
         {(job.department || job.location) && (
@@ -48,12 +54,12 @@ export default async function VagasPublicJobPage({ params }: { params: Promise<{
         </section>
       )}
 
+      <ApplyForm jobId={job.id} customFormFields={job.customFormFields} />
+
       {job.applyContact && (
-        <section className="rounded-panel border border-border bg-card p-4">
-          <p className="text-sm text-foreground">
-            Para se candidatar, entre em contato: <span className="font-medium">{job.applyContact}</span>
-          </p>
-        </section>
+        <p className="text-center text-xs text-muted-foreground">
+          Dúvidas sobre esta vaga? Entre em contato: <span className="font-medium">{job.applyContact}</span>
+        </p>
       )}
     </div>
   );

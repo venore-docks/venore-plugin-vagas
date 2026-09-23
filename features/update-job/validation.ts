@@ -1,3 +1,4 @@
+import { isValidCustomApplicationField } from "../../shared/application-fields";
 import type { JobValidationError } from "../create-job/validation";
 import type { UpdateJobInput } from "./types";
 
@@ -10,6 +11,9 @@ export function validateUpdateJobInput(input: UpdateJobInput): JobValidationErro
   }
   if (input.description.trim().length === 0) {
     return { code: "vagas.invalid_description", message: "A descrição da vaga não pode ser vazia." };
+  }
+  if (!input.customFormFields.every(isValidCustomApplicationField)) {
+    return { code: "vagas.invalid_custom_form_fields", message: "Campo customizado do formulário inválido." };
   }
   return null;
 }

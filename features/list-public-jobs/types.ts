@@ -7,6 +7,7 @@ export type PublicJobView = {
   department: string | null;
   location: string | null;
   publishedAt: Date | null;
+  coverImageUrl: string | null;
 };
 
 export type ListPublicJobsResult = OperationResult<PublicJobView[]>;

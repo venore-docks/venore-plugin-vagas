@@ -1,7 +1,7 @@
 import { eq, sql } from "drizzle-orm";
 import { db } from "@venore/plugin-sdk";
 import { vagasJobs } from "../../database/schema";
-import type { JobRecord } from "../../contracts/types";
+import type { CustomApplicationField, JobRecord } from "../../contracts/types";
 
 export async function findJobById(id: string): Promise<JobRecord | null> {
   const [row] = await db.select().from(vagasJobs).where(eq(vagasJobs.id, id)).limit(1);
@@ -17,6 +17,10 @@ export async function applyJobUpdate(input: {
   requirements: string | null;
   applyContact: string | null;
   status: JobRecord["status"];
+  categoryId: string | null;
+  coverMediaAssetId: string | null;
+  customFormFields: CustomApplicationField[];
+  requiresDisc: boolean;
 }): Promise<JobRecord> {
   const [row] = await db
     .update(vagasJobs)
@@ -28,6 +32,10 @@ export async function applyJobUpdate(input: {
       requirements: input.requirements,
       applyContact: input.applyContact,
       status: input.status,
+      categoryId: input.categoryId,
+      coverMediaAssetId: input.coverMediaAssetId,
+      customFormFields: input.customFormFields,
+      requiresDisc: input.requiresDisc,
       updatedAt: sql`now()`,
     })
     .where(eq(vagasJobs.id, input.id))

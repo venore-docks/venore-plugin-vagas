@@ -12,9 +12,14 @@ export function VagasPublicList({ jobs }: { jobs: PublicJobView[] }) {
       {jobs.map((job) => (
         <li key={job.id} className="rounded-panel border border-border bg-card p-4">
           <Link href={`/vagas/${job.slug}`} className="flex items-start gap-3">
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-foreground">
-              <Briefcase className="size-4" />
-            </span>
+            {job.coverImageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={job.coverImageUrl} alt="" className="size-9 shrink-0 rounded-full object-cover" />
+            ) : (
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-foreground">
+                <Briefcase className="size-4" />
+              </span>
+            )}
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-foreground hover:underline">{job.title}</p>
               {(job.department || job.location) && (

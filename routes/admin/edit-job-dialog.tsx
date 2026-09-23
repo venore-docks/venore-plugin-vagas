@@ -11,10 +11,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@venore/plugin-sdk/ui";
-import type { JobRecord } from "../../index";
+import type { PickableMedia } from "@venore/plugin-sdk/ui";
+import type { JobCategoryRecord, JobRecord } from "../../contracts/types";
 import { EditJobForm } from "./edit-job-form";
 
-export function EditJobDialog({ job }: { job: JobRecord }) {
+export function EditJobDialog({
+  job,
+  categories,
+  coverMedia,
+}: {
+  job: JobRecord;
+  categories: JobCategoryRecord[];
+  coverMedia: PickableMedia | null;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -29,7 +38,7 @@ export function EditJobDialog({ job }: { job: JobRecord }) {
           <DialogTitle>Editar vaga</DialogTitle>
           <DialogDescription>{job.title}</DialogDescription>
         </DialogHeader>
-        <EditJobForm job={job} onSuccess={() => setOpen(false)} />
+        <EditJobForm job={job} categories={categories} coverMedia={coverMedia} onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

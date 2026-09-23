@@ -25,6 +25,10 @@ export async function updateJob(command: UpdateJobCommand): Promise<UpdateJobRes
     requirements: command.requirements?.trim() || null,
     applyContact: command.applyContact?.trim() || null,
     status: command.status,
+    categoryId: command.categoryId,
+    coverMediaAssetId: command.coverMediaAssetId,
+    customFormFields: command.customFormFields,
+    requiresDisc: command.requiresDisc,
   });
 
   endOperation(handle, { success: true });

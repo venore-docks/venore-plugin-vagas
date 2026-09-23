@@ -1,12 +1,23 @@
 import { asPluginPage, type PluginRouteTable } from "@venore/plugin-sdk";
 import AdminPage from "./admin/page";
+import AdminCategoriesPage from "./admin-categories/page";
+import AdminApplicationsPage from "./admin-applications/page";
 import PublicPage from "./public/page";
 import PublicJobPage from "./public/job/page";
+import PublicJobApplicationConfirmationPage from "./public/job-application-confirmation/page";
 
 export const vagasRouteTable: PluginRouteTable = {
-  admin: [{ pattern: "", Component: asPluginPage(AdminPage) }],
+  admin: [
+    { pattern: "", Component: asPluginPage(AdminPage) },
+    { pattern: "categorias", Component: asPluginPage(AdminCategoriesPage) },
+    { pattern: ":jobId/candidaturas", Component: asPluginPage(AdminApplicationsPage) },
+  ],
   public: [
     { pattern: "vagas", Component: asPluginPage(PublicPage) },
     { pattern: "vagas/:slug", Component: asPluginPage(PublicJobPage) },
+    {
+      pattern: "vagas/:slug/candidatura/:applicationId/concluido",
+      Component: asPluginPage(PublicJobApplicationConfirmationPage),
+    },
   ],
 };

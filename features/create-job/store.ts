@@ -25,6 +25,10 @@ export async function insertJob(command: CreateJobCommand): Promise<JobRecord> {
           requirements: command.requirements?.trim() || null,
           applyContact: command.applyContact?.trim() || null,
           status: command.status ?? "open",
+          categoryId: command.categoryId || null,
+          coverMediaAssetId: command.coverMediaAssetId || null,
+          customFormFields: command.customFormFields ?? [],
+          requiresDisc: command.requiresDisc ?? true,
           publishedAt: new Date(),
           createdByUserId: command.actorId,
         })
