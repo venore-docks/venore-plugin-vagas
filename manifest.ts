@@ -7,7 +7,7 @@ export const vagasManifest: PluginManifest = {
   manifestVersion: "1.0.0",
   key: "vagas",
   name: "Vagas de emprego",
-  version: "1.2.3",
+  version: "1.2.4",
   description: "Cadastro de vagas de emprego pelo RH, com listagem pública sem login.",
   compatibility: { coreVersion: ">=2.0.0 <3.0.0" },
   // Opcional: candidatura cria uma instância de Test DISC vinculada (shared/disc-bridge.ts) só
@@ -18,6 +18,11 @@ export const vagasManifest: PluginManifest = {
   // nunca tem conta) — uploadReservedCategoryAssetPublic recusa qualquer categoryKey não listada
   // aqui por nenhum plugin. Ver venore-docks/src/platform/plugin-engine/manifest-schema.ts.
   anonymousUploadCategories: ["vagas.applications"],
+  // Currículo é dado pessoal (LGPD): o arquivo só é lido por quem tem vagas.applications.review
+  // (RH/gestores) e pelo superadmin — admin com media.manage NÃO abre pela biblioteca de mídia.
+  // Exige core com mídia restrita (venore-docks CHANGELOG [Unreleased], migration 0054); aplicado
+  // também aos currículos já enviados no próximo deploy.
+  restrictedUploadCategories: [{ key: "vagas.applications", accessPermission: "vagas.applications.review" }],
   // Schema próprio do plugin — aplicado no install (run-plugin-migrations.ts), não no
   // vercel-build. Default de migrationsSchema ("vagas_migrations") já bate com
   // venore-plugin-vagas/drizzle.config.ts.
