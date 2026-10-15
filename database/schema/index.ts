@@ -148,8 +148,8 @@ export const vagasFormTemplates = vagasSchema.table("form_templates", {
 
 // Uma candidatura por envio do formulário público (routes/public/job-apply). resumeMediaAssetId é
 // loose ref pro media do core (upload anônimo, ver uploadReservedCategoryAssetPublic).
-// discInstanceId/discReportId são loose refs pro plugin disc (dependência OPCIONAL — regra 2, sem
-// FK cross-plugin; ver shared/disc-bridge.ts). formResponses é keyed por CustomApplicationField.id.
+// discInstanceId/discReportId são loose refs pro plugin tests (dependência OPCIONAL — regra 2, sem
+// FK cross-plugin; ver shared/tests-bridge.ts). formResponses é keyed por CustomApplicationField.id.
 //
 // status: 'submitted' (sem etapa DISC, ou candidatura acabou de ser criada aguardando decidir se
 // tem DISC) -> 'awaiting_disc' (instância DISC criada, candidato ainda não voltou) ->

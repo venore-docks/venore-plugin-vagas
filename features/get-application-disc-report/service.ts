@@ -1,4 +1,4 @@
-import { loadDisc } from "../../shared/disc-bridge";
+import { loadTests, VAGAS_TEST_MODULE_ID } from "../../shared/tests-bridge";
 import { findApplicationById } from "../sync-application-disc-status/store";
 import { findJobById } from "../update-job/store";
 import type { GetApplicationDiscReportInput, GetApplicationDiscReportResult } from "./types";
@@ -17,17 +17,21 @@ export async function getApplicationDiscReport(input: GetApplicationDiscReportIn
     return { success: false, error: { code: "vagas.not_found", message: "Vaga não encontrada." } };
   }
 
-  const disc = await loadDisc();
-  if (!disc) {
-    return { success: false, error: { code: "vagas.disc_unavailable", message: "O plugin Teste DISC não está instalado ou ativo." } };
+  const tests = await loadTests();
+  if (!tests) {
+    return { success: false, error: { code: "vagas.disc_unavailable", message: "O plugin Testes não está instalado ou ativo." } };
   }
 
-  // getDiscReport (não o handler com claim) é público por design, sem sessão nem efeito
-  // colateral — ver comentário em shared/disc-bridge.ts.
-  const result = await disc.getDiscReport({ reportId: application.discReportId });
+  // getTestResultExternal (não o handler com claim) não exige sessão nem tem efeito colateral — ver
+  // shared/tests-bridge.ts. A autorização (vagas.applications.review) já foi checada no handler.
+  const result = await tests.getTestResultExternal(application.discReportId);
   if (!result.success) {
     return result;
   }
+  if (result.data.testId !== VAGAS_TEST_MODULE_ID) {
+    return { success: false, error: { code: "vagas.no_disc_report", message: "Esta candidatura ainda não tem um relatório DISC." } };
+  }
 
-  return { success: true, data: { candidateName: application.candidateName, jobTitle: job.title, report: result.data } };
+  const footerText = await tests.getTestReportFooterText();
+  return { success: true, data: { candidateName: application.candidateName, jobTitle: job.title, result: result.data, footerText } };
 }

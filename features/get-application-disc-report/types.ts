@@ -1,10 +1,13 @@
 import type { OperationResult } from "@venore/plugin-sdk";
-import type { DiscReportViewExternal } from "../../shared/disc-bridge";
+import type { TestResultViewExternal } from "../../shared/tests-bridge";
 
 export type ApplicationDiscReportView = {
   candidateName: string;
   jobTitle: string;
-  report: DiscReportViewExternal;
+  // Resultado do plugin Testes — renderizado pelo TestResultReport dele (não se duplica o relatório aqui).
+  result: TestResultViewExternal;
+  // Rodapé configurado no admin do plugin Testes.
+  footerText: string;
 };
 
 export type GetApplicationDiscReportInput = { applicationId: string };

@@ -1,5 +1,5 @@
 import { getMediaAssetForTrustedReview } from "@venore/plugin-sdk/media";
-import { loadDisc, type DiscBarrel } from "../../shared/disc-bridge";
+import { loadTests, type TestsBarrel } from "../../shared/tests-bridge";
 import type { ApplicationRecord } from "../../contracts/types";
 import { findApplicationsByJobId } from "./store";
 import type { ApplicationAdminView, ListApplicationsInput, ListApplicationsResult } from "./types";
@@ -13,29 +13,29 @@ async function resolveResumeUrl(mediaAssetId: string | null): Promise<string | n
   return result.success && result.data ? result.data.url : null;
 }
 
-// listInstanceReportsExternal é o bypass equivalente do lado disc (ver shared/disc-bridge.ts) —
-// só o resumo de perfil, não o dataset completo (suficiente pro RH bater o olho na tabela).
+// listTestInstanceResultsExternal é o bypass equivalente do lado Testes (ver shared/tests-bridge.ts) —
+// só o resumo de perfil (headline), não o dataset completo (suficiente pro RH bater o olho na tabela).
 async function resolveDiscProfile(
-  disc: DiscBarrel | null,
+  tests: TestsBarrel | null,
   application: ApplicationRecord,
 ): Promise<ApplicationAdminView["discProfile"]> {
-  if (!disc || !application.discInstanceId) return null;
-  const reports = await disc.listInstanceReportsExternal(application.discInstanceId);
-  if (!reports.success || reports.data.length === 0) return null;
-  const [report] = reports.data;
-  return { profileKey: report.profileKey, profileKeySecondary: report.profileKeySecondary };
+  if (!tests || !application.discInstanceId) return null;
+  const reports = await tests.listTestInstanceResultsExternal(application.discInstanceId);
+  if (!reports.success || reports.data.results.length === 0) return null;
+  const [report] = reports.data.results;
+  return { profileKey: report.headline, profileKeySecondary: report.headlineSecondary ?? "" };
 }
 
 export async function listApplications(input: ListApplicationsInput): Promise<ListApplicationsResult> {
   const applications = await findApplicationsByJobId(input.jobId);
-  const disc = await loadDisc();
+  const tests = await loadTests();
 
   const views = await Promise.all(
     applications.map(
       async (application): Promise<ApplicationAdminView> => ({
         ...application,
         resumeUrl: await resolveResumeUrl(application.resumeMediaAssetId),
-        discProfile: await resolveDiscProfile(disc, application),
+        discProfile: await resolveDiscProfile(tests, application),
       }),
     ),
   );

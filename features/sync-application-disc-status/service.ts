@@ -1,4 +1,4 @@
-import { loadDisc } from "../../shared/disc-bridge";
+import { loadTests } from "../../shared/tests-bridge";
 import { findApplicationById, markApplicationCompleted } from "./store";
 import type { SyncApplicationDiscStatusInput, SyncApplicationDiscStatusResult } from "./types";
 
@@ -16,17 +16,17 @@ export async function syncApplicationDiscStatus(input: SyncApplicationDiscStatus
     return { success: true, data: application };
   }
 
-  const disc = await loadDisc();
-  if (!disc) {
+  const tests = await loadTests();
+  if (!tests) {
     return { success: true, data: application };
   }
 
-  const reports = await disc.listInstanceReportsExternal(application.discInstanceId);
-  if (!reports.success || reports.data.length === 0) {
+  const reports = await tests.listTestInstanceResultsExternal(application.discInstanceId);
+  if (!reports.success || reports.data.results.length === 0) {
     return { success: true, data: application };
   }
 
-  const [mostRecentReport] = reports.data;
+  const [mostRecentReport] = reports.data.results;
   const updated = await markApplicationCompleted(application.id, mostRecentReport.id);
   return { success: true, data: updated };
 }

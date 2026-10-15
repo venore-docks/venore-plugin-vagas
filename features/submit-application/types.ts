@@ -8,7 +8,7 @@ export type SubmitApplicationResumeFile = {
   data: Buffer;
 };
 
-// Sem actorId — candidatura é sempre anônima (ver shared/disc-bridge.ts e o comentário em
+// Sem actorId — candidatura é sempre anônima (ver shared/tests-bridge.ts e o comentário em
 // service.ts sobre o upload de currículo público).
 export type SubmitApplicationInput = {
   jobId: string;
@@ -21,7 +21,7 @@ export type SubmitApplicationInput = {
 
 export type SubmitApplicationOutcome = {
   application: ApplicationRecord;
-  // Pra onde mandar o candidato a seguir: /disc/teste?slug=... quando a vaga exige DISC e o
+  // Pra onde mandar o candidato a seguir: /testes/disc/teste?slug=... quando a vaga exige DISC e o
   // plugin está ativo, senão a própria página de confirmação do vagas.
   nextUrl: string;
 };

@@ -7,13 +7,14 @@ export const vagasManifest: PluginManifest = {
   manifestVersion: "1.0.0",
   key: "vagas",
   name: "Vagas de emprego",
-  version: "1.2.4",
+  version: "1.3.0",
   description: "Cadastro de vagas de emprego pelo RH, com listagem pública sem login.",
   compatibility: { coreVersion: ">=2.0.0 <3.0.0" },
-  // Opcional: candidatura cria uma instância de Test DISC vinculada (shared/disc-bridge.ts) só
-  // quando isPluginActive("disc") — sem o disc instalado, a candidatura completa normalmente sem
-  // a etapa (dependência nunca bloqueia o vagas em si, só desliga essa funcionalidade).
-  dependencies: [{ pluginKey: "disc", type: "optional" }],
+  // Opcional: candidatura cria uma aplicação do teste DISC (plugin Testes, módulo "disc") vinculada
+  // (shared/tests-bridge.ts) só quando o plugin "tests" está ativo — sem ele instalado, a candidatura
+  // completa normalmente sem a etapa (dependência nunca bloqueia o vagas em si, só desliga essa
+  // funcionalidade).
+  dependencies: [{ pluginKey: "tests", type: "optional" }],
   // Autoriza upload SEM SESSÃO só nesta categoria reservada própria (currículo de candidato, que
   // nunca tem conta) — uploadReservedCategoryAssetPublic recusa qualquer categoryKey não listada
   // aqui por nenhum plugin. Ver venore-docks/src/platform/plugin-engine/manifest-schema.ts.

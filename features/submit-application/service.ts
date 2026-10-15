@@ -1,7 +1,7 @@
 import { beginOperation, endOperation } from "@venore/plugin-sdk/observability";
 import { uploadReservedCategoryAssetPublic } from "@venore/plugin-sdk/media";
 import { findMissingRequiredField } from "../../shared/application-fields";
-import { loadDisc } from "../../shared/disc-bridge";
+import { loadTests, VAGAS_TEST_MODULE_ID } from "../../shared/tests-bridge";
 import { findOpenJobById, insertApplication, markApplicationAwaitingDisc } from "./store";
 import type { SubmitApplicationInput, SubmitApplicationResult } from "./types";
 
@@ -75,17 +75,20 @@ export async function submitApplication(input: SubmitApplicationInput): Promise<
     return { success: true, data: { application, nextUrl: confirmationUrl(job.slug, application.id) } };
   }
 
-  const disc = await loadDisc();
-  if (!disc) {
-    // Vaga pede DISC mas o plugin não está instalado nesta instância — degrada com dignidade
+  const tests = await loadTests();
+  if (!tests) {
+    // Vaga pede DISC mas o plugin Testes não está instalado nesta instância — degrada com dignidade
     // (candidatura já está registrada), mesmo espírito de toda dependência opcional na plataforma.
     endOperation(handle, { success: true });
     return { success: true, data: { application, nextUrl: confirmationUrl(job.slug, application.id) } };
   }
 
-  const instance = await disc.createDiscInstanceExternal({
-    environmentLabel: job.discEnvironmentLabel?.trim() || job.title,
+  const instance = await tests.createTestInstanceExternal({
+    testId: VAGAS_TEST_MODULE_ID,
+    contextLabel: job.discEnvironmentLabel?.trim() || job.title,
     actorId: null,
+    identityMode: "identified",
+    showResultToParticipant: false,
     redirectUrl: confirmationUrl(job.slug, application.id),
     externalRef: `vagas:${application.id}`,
   });
@@ -99,5 +102,5 @@ export async function submitApplication(input: SubmitApplicationInput): Promise<
   const updated = await markApplicationAwaitingDisc(application.id, instance.data.id);
 
   endOperation(handle, { success: true });
-  return { success: true, data: { application: updated, nextUrl: `/disc/teste?slug=${instance.data.shareSlug}` } };
+  return { success: true, data: { application: updated, nextUrl: `/testes/${VAGAS_TEST_MODULE_ID}/teste?slug=${instance.data.shareSlug}` } };
 }
